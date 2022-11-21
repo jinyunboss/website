@@ -4,6 +4,29 @@
   
     
     <entry>
+      <title>CentOS之后,该如何选择服务器发行版?</title>
+      <link href="/ad318af74ad1/"/>
+      <url>/ad318af74ad1/</url>
+      
+        <content type="html"><![CDATA[<h2 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h2><ul><li><strong>你在不断的努力之下,终于干上Linux运维这一份工作,但是好景不长,某一天你突然得知了CentOS转为了Stream(rhel上游)版的消息</strong></li><li><strong>网上各种CentOS停止维护的消息迎面而来,这时,你也被迫开始了新的发行版选择的道路</strong></li><li><strong><code>Debian大法好</code>,<code>RHEL衍生版稳</code>,<code>Rocky Linux是CentOS的继任者</code>各种声音让你纠结不已</strong></li><li><strong>不经意间,你发现了这篇文章….</strong></li></ul><h2 id="Debian系-VS-RedHat系"><a href="#Debian系-VS-RedHat系" class="headerlink" title="Debian系 VS RedHat系"></a>Debian系 VS RedHat系</h2><table><thead><tr><th>Debian系</th><th>RedHat系</th></tr></thead><tbody><tr><td>Debian</td><td>CentOS Steam</td></tr><tr><td>Ubuntu</td><td>Rocky Linux</td></tr></tbody></table>]]></content>
+      
+      
+      
+        <tags>
+            
+            <tag> Linux </tag>
+            
+            <tag> Debian </tag>
+            
+            <tag> Centos </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
       <title>zabbix告警抑制脚本</title>
       <link href="/144b8c8070e4/"/>
       <url>/144b8c8070e4/</url>
