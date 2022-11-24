@@ -4,6 +4,29 @@
   
     
     <entry>
+      <title>Celery问题记录</title>
+      <link href="/91ee63c82844/"/>
+      <url>/91ee63c82844/</url>
+      
+        <content type="html"><![CDATA[<h1 id="Celery问题记录"><a href="#Celery问题记录" class="headerlink" title="Celery问题记录"></a>Celery问题记录</h1><h2 id="ACK超时"><a href="#ACK超时" class="headerlink" title="ACK超时"></a>ACK超时</h2><figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">Unrecoverable error: PreconditionFailed(406, <span class="string">&#x27;PRECONDITION_FAILED - delivery acknowledgement on channel 1 timed out. Timeout value used: 1800000 ms. This timeout value can be configured, see consumers doc guide to learn more&#x27;</span>, (0, 0), <span class="string">&#x27;&#x27;</span>)</span><br><span class="line">Traceback (most recent call last):</span><br><span class="line">  ...</span><br><span class="line">  File <span class="string">&quot;/usr/local/pyenv/versions/3.10.8/lib/python3.10/site-packages/amqp/channel.py&quot;</span>, line 293, <span class="keyword">in</span> _on_close</span><br><span class="line">    raise error_for_code(</span><br><span class="line">amqp.exceptions.PreconditionFailed: (0, 0): (406) PRECONDITION_FAILED - delivery acknowledgement on channel 1 timed out. Timeout value used: 1800000 ms. This <span class="built_in">timeout</span> value can be configured, see consumers doc guide to learn more</span><br></pre></td></tr></table></figure><h3 id="原因"><a href="#原因" class="headerlink" title="原因"></a>原因</h3><p>使用<code>RabbitMQ&gt;3.8</code>版本时, 发现消费者会报ACK错误<br>起因是因为我们设置了一个长时间的<code>ETA</code>任务,<code>Celery</code>会定时去检查(不断去读取<code>RabbitMQ</code>中的消息)任务的到达时间,在时间没到之前并不执行也不会回复<code>ACK</code><br>在<code>RabbitMQ</code>中体现为生产者获取了任务后没有返回<code>ACK</code>, 在超时后<code>RabbitMQ</code>抛出<code>PRECONDITION_FAILED</code>错误<br><code>RabbitMQ</code>从<code>3.8.15</code>版本起<code>consumer_timeout</code>的默认值是<code>15</code>分钟,<code>3.8.17</code>之后，默认值是<code>30</code>分钟</p><h3 id="解决方案"><a href="#解决方案" class="headerlink" title="解决方案"></a>解决方案</h3><p>根据<code>Celery</code>文档直接修改<code>RabbitMQ</code>的参数,把<code>consumer_timeout</code>的值拉大,一定要大于或等于设置的<code>ETA</code>任务的时间</p><figure class="highlight ini"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 可以直接设置为1年</span></span><br><span class="line"><span class="attr">consumer_timeout</span> = <span class="number">31622400000</span></span><br></pre></td></tr></table></figure><h3 id="参考"><a href="#参考" class="headerlink" title="参考:"></a>参考:</h3><p>1.<a href="https://docs.celeryq.dev/en/stable/userguide/calling.html#eta-and-countdown">https://docs.celeryq.dev/en/stable/userguide/calling.html#eta-and-countdown</a><br>2.<a href="https://www.rabbitmq.com/consumers.html#acknowledgement-timeout">https://www.rabbitmq.com/consumers.html#acknowledgement-timeout</a><br>3.<a href="https://stackoverflow.com/questions/69828547/precondition-failed-delivery-acknowledge-timeout-on-celery-rabbitmq-with-geve">https://stackoverflow.com/questions/69828547/precondition-failed-delivery-acknowledge-timeout-on-celery-rabbitmq-with-geve</a></p><hr>]]></content>
+      
+      
+      
+        <tags>
+            
+            <tag> Python </tag>
+            
+            <tag> Celery </tag>
+            
+            <tag> RabbitMQ </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
       <title>CentOS之后,该如何选择服务器发行版?</title>
       <link href="/ad318af74ad1/"/>
       <url>/ad318af74ad1/</url>
