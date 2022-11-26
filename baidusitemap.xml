@@ -1,15 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
+    <loc>http://lotbrick.com/2022/11/celery-error.html</loc>
+    <lastmod>2022-11-26</lastmod>
+  </url>
+  <url>
     <loc>http://lotbrick.com/2022/11/rhel-vs-debian.html</loc>
-    <lastmod>2022-11-24</lastmod>
+    <lastmod>2022-11-26</lastmod>
+  </url>
+  <url>
+    <loc>http://lotbrick.com/2022/11/ssh-tunnel-with-script.html</loc>
+    <lastmod>2022-11-26</lastmod>
   </url>
   <url>
     <loc>http://lotbrick.com/2022/11/zabbix-alert-to-wecome.html</loc>
-    <lastmod>2022-11-24</lastmod>
-  </url>
-  <url>
-    <loc>http://lotbrick.com/2022/11/celery-error.html</loc>
-    <lastmod>2022-11-24</lastmod>
+    <lastmod>2022-11-26</lastmod>
   </url>
 </urlset> 
