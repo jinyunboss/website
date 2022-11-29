@@ -4,25 +4,7 @@
   <url>
     <loc>http://lotbrick.com/tags/index.html</loc>
     
-    <lastmod>2022-11-26</lastmod>
-    
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>http://lotbrick.com/2022/11/celery-error.html</loc>
-    
-    <lastmod>2022-11-26</lastmod>
-    
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>http://lotbrick.com/2022/11/rhel-vs-debian.html</loc>
-    
-    <lastmod>2022-11-26</lastmod>
+    <lastmod>2022-11-29</lastmod>
     
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
@@ -31,7 +13,7 @@
   <url>
     <loc>http://lotbrick.com/2022/11/ssh-tunnel-with-script.html</loc>
     
-    <lastmod>2022-11-26</lastmod>
+    <lastmod>2022-11-29</lastmod>
     
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
@@ -40,7 +22,7 @@
   <url>
     <loc>http://lotbrick.com/2022/11/zabbix-alert-to-wecome.html</loc>
     
-    <lastmod>2022-11-26</lastmod>
+    <lastmod>2022-11-29</lastmod>
     
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
@@ -49,7 +31,25 @@
   <url>
     <loc>http://lotbrick.com/categories/index.html</loc>
     
-    <lastmod>2022-11-26</lastmod>
+    <lastmod>2022-11-29</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>http://lotbrick.com/2022/11/celery-error.html</loc>
+    
+    <lastmod>2022-11-29</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>http://lotbrick.com/2022/11/rhel-vs-debian.html</loc>
+    
+    <lastmod>2022-11-29</lastmod>
     
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
@@ -58,7 +58,7 @@
 
   <url>
     <loc>http://lotbrick.com/</loc>
-    <lastmod>2022-11-26</lastmod>
+    <lastmod>2022-11-29</lastmod>
     <changefreq>daily</changefreq>
     <priority>1.0</priority>
   </url>
@@ -66,63 +66,63 @@
   
   <url>
     <loc>http://lotbrick.com/tags/Python/</loc>
-    <lastmod>2022-11-26</lastmod>
+    <lastmod>2022-11-29</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>http://lotbrick.com/tags/Celery/</loc>
-    <lastmod>2022-11-26</lastmod>
+    <lastmod>2022-11-29</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>http://lotbrick.com/tags/RabbitMQ/</loc>
-    <lastmod>2022-11-26</lastmod>
+    <lastmod>2022-11-29</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>http://lotbrick.com/tags/Linux/</loc>
-    <lastmod>2022-11-26</lastmod>
+    <lastmod>2022-11-29</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>http://lotbrick.com/tags/Debian/</loc>
-    <lastmod>2022-11-26</lastmod>
+    <lastmod>2022-11-29</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>http://lotbrick.com/tags/Centos/</loc>
-    <lastmod>2022-11-26</lastmod>
+    <lastmod>2022-11-29</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>http://lotbrick.com/tags/shell/</loc>
-    <lastmod>2022-11-26</lastmod>
+    <lastmod>2022-11-29</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>http://lotbrick.com/tags/SSH/</loc>
-    <lastmod>2022-11-26</lastmod>
+    <lastmod>2022-11-29</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>http://lotbrick.com/tags/zabbix/</loc>
-    <lastmod>2022-11-26</lastmod>
+    <lastmod>2022-11-29</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
@@ -131,7 +131,7 @@
   
   <url>
     <loc>http://lotbrick.com/categories/shell/</loc>
-    <lastmod>2022-11-26</lastmod>
+    <lastmod>2022-11-29</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
