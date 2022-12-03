@@ -1,0 +1,219 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"><title>GPT硬盘(GUID分区表)扩容后无法新建分区 | lotbrick</title><meta name="author" content="三和大神梁某,root@lotbrick.com"><meta name="copyright" content="三和大神梁某"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="前情提要某次维护时间给硬盘扩容了1T大小的容量,需要新建分区加入LVM,硬盘使用GPT格式分区但想创建新分区时gdisk虽然识别到了硬盘容量增大(扇区变多了),但是可用扇区数并没有增加,无法创建新分区如下图:&#x2F;dev&#x2F;sda可用扇区有 9367183360 个,总共 4.4T 大小但最后可用扇区还是只有7025387486 个 尝试新建分区时,只显示出了硬盘头部未使用的1000">
+<meta property="og:type" content="article">
+<meta property="og:title" content="GPT硬盘(GUID分区表)扩容后无法新建分区">
+<meta property="og:url" content="http://lotbrick.com/2022/12/gpt-partition-disk-extend.html">
+<meta property="og:site_name" content="lotbrick">
+<meta property="og:description" content="前情提要某次维护时间给硬盘扩容了1T大小的容量,需要新建分区加入LVM,硬盘使用GPT格式分区但想创建新分区时gdisk虽然识别到了硬盘容量增大(扇区变多了),但是可用扇区数并没有增加,无法创建新分区如下图:&#x2F;dev&#x2F;sda可用扇区有 9367183360 个,总共 4.4T 大小但最后可用扇区还是只有7025387486 个 尝试新建分区时,只显示出了硬盘头部未使用的1000">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://lotbrick.com/img/bg10.png">
+<meta property="article:published_time" content="2022-12-01T06:44:01.000Z">
+<meta property="article:modified_time" content="2022-12-03T09:35:43.458Z">
+<meta property="article:author" content="三和大神梁某">
+<meta property="article:tag" content="linux">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://lotbrick.com/img/bg10.png"><link rel="shortcut icon" href="/img/favicon.png"><link rel="canonical" href="http://lotbrick.com/2022/12/gpt-partition-disk-extend"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.staticfile.org/font-awesome/6.2.0/css/all.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://cdn.staticfile.org/fancyapps-ui/4.0.31/fancybox.min.css" media="print" onload="this.media='all'"><script async="async" src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script><script>(adsbygoogle = window.adsbygoogle || []).push({
+  google_ad_client: 'ca-pub-4887275657926273',
+  enable_page_level_ads: 'true'
+});</script><script>const GLOBAL_CONFIG = { 
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"/search.xml","preload":false,"languages":{"hits_empty":"找不到您查询的内容：${query}"}},
+  translate: undefined,
+  noticeOutdate: undefined,
+  highlight: {"plugin":"highlighjs","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false},
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  date_suffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  source: {
+    justifiedGallery: {
+      js: 'https://cdn.staticfile.org/flickr-justified-gallery/2.1.2/fjGallery.min.js',
+      css: 'https://cdn.staticfile.org/flickr-justified-gallery/2.1.2/fjGallery.min.css'
+    }
+  },
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isAnchor: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: 'GPT硬盘(GUID分区表)扩容后无法新建分区',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  postUpdate: '2022-12-03 17:35:43'
+}</script><noscript><style type="text/css">
+  #nav {
+    opacity: 1
+  }
+  .justified-gallery img {
+    opacity: 1
+  }
+
+  #recent-posts time,
+  #post-meta time {
+    display: inline !important
+  }
+</style></noscript><script>(win=>{
+    win.saveToLocal = {
+      set: function setWithExpiry(key, value, ttl) {
+        if (ttl === 0) return
+        const now = new Date()
+        const expiryDay = ttl * 86400000
+        const item = {
+          value: value,
+          expiry: now.getTime() + expiryDay,
+        }
+        localStorage.setItem(key, JSON.stringify(item))
+      },
+
+      get: function getWithExpiry(key) {
+        const itemStr = localStorage.getItem(key)
+
+        if (!itemStr) {
+          return undefined
+        }
+        const item = JSON.parse(itemStr)
+        const now = new Date()
+
+        if (now.getTime() > item.expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return item.value
+      }
+    }
+  
+    win.getScript = url => new Promise((resolve, reject) => {
+      const script = document.createElement('script')
+      script.src = url
+      script.async = true
+      script.onerror = reject
+      script.onload = script.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        script.onload = script.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(script)
+    })
+  
+      win.activateDarkMode = function () {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      win.activateLightMode = function () {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+          if (t === 'dark') activateDarkMode()
+          else if (t === 'light') activateLightMode()
+        
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    
+    const detectApple = () => {
+      if(/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)){
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+    })(window)</script><meta name="generator" content="Hexo 6.3.0"></head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src="/img/avatar.JPG" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="sidebar-site-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">5</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">10</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">1</div></a></div><hr/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 时间轴</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> About</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url('/img/bg10.png')"><nav id="nav"><span id="blog_name"><a id="site-name" href="/">lotbrick</a></span><div id="menus"><div id="search-button"><a class="site-page social-icon search"><i class="fas fa-search fa-fw"></i><span> 搜索</span></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 时间轴</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> About</span></a></div></div><div id="toggle-menu"><a class="site-page"><i class="fas fa-bars fa-fw"></i></a></div></div></nav><div id="post-info"><h1 class="post-title">GPT硬盘(GUID分区表)扩容后无法新建分区</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2022-12-01T06:44:01.000Z" title="发表于 2022-12-01 14:44:01">2022-12-01</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2022-12-03T09:35:43.458Z" title="更新于 2022-12-03 17:35:43">2022-12-03</time></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-wordcount"><i class="far fa-file-word fa-fw post-meta-icon"></i><span class="post-meta-label">字数总计:</span><span class="word-count">536</span><span class="post-meta-separator">|</span><i class="far fa-clock fa-fw post-meta-icon"></i><span class="post-meta-label">阅读时长:</span><span>1分钟</span></span><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title="GPT硬盘(GUID分区表)扩容后无法新建分区"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">阅读量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><h2 id="前情提要"><a href="#前情提要" class="headerlink" title="前情提要"></a>前情提要</h2><p>某次维护时间给硬盘扩容了1T大小的容量,需要新建分区加入<code>LVM</code>,硬盘使用<code>GPT</code>格式分区<br>但想创建新分区时<code>gdisk</code>虽然识别到了硬盘容量增大(扇区变多了),但是可用扇区数并没有增加,无法创建新分区<br>如下图:<br>&#x2F;dev&#x2F;sda可用扇区有 9367183360 个,总共 4.4T 大小<br>但最后可用扇区还是只有7025387486 个<br><img src="/2022/12/gpt-partition-disk-extend/command_p.png"></p>
+<p>尝试新建分区时,只显示出了硬盘头部未使用的1000k的大小</p>
+<p><img src="/2022/12/gpt-partition-disk-extend/command_n.png"></p>
+<h2 id="问题原因"><a href="#问题原因" class="headerlink" title="问题原因"></a>问题原因</h2><p>GPT磁盘具有冗余的主分区表和备份分区表，会在硬盘的头部扇区和最尾部扇区都放一份分区表<br>并且分区表中会记录硬盘可用空间和组成各个分区的起始扇区号和结束扇区号<br>当我们扩容了硬盘的时候，硬盘虽然已经变大了，但是GPT分区表中的扇区号并没有变化，也就是现在磁盘最尾部并没有备份的分区表<br>此时就需要让GPT把磁盘的备份分区表搬到硬盘最尾部去，这样我们扩容的容量才能正确显示出来</p>
+<p><img src="/2022/12/gpt-partition-disk-extend/disk_extend.png"></p>
+<h2 id="解决方式"><a href="#解决方式" class="headerlink" title="解决方式"></a>解决方式</h2><h3 id="使用gdisk的v选项检查磁盘"><a href="#使用gdisk的v选项检查磁盘" class="headerlink" title="使用gdisk的v选项检查磁盘"></a>使用<code>gdisk</code>的<code>v</code>选项检查磁盘</h3><figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 使用gdisk的v选项</span></span><br><span class="line"></span><br><span class="line">gdisk /dev/sda</span><br><span class="line"></span><br><span class="line"><span class="comment"># 执行v选项</span></span><br><span class="line">v</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<ul>
+<li>执行后如下图,<code>gdisk</code>已经告诉我们我们的分区表不太对劲</li>
+<li>提示硬盘的分区表不在硬盘的尾部，让我们用<code>e</code>选项来搬到尾部<br><img src="/2022/12/gpt-partition-disk-extend/command_v.png"></li>
+</ul>
+<h3 id="按x进入高级选项"><a href="#按x进入高级选项" class="headerlink" title="按x进入高级选项"></a>按<code>x</code>进入高级选项</h3><figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">x</span><br></pre></td></tr></table></figure>
+<p><img src="/2022/12/gpt-partition-disk-extend/command_x.png"></p>
+<ul>
+<li><code>x</code>选项之后可以到看<code>e</code>共享了</li>
+</ul>
+<h3 id="执行e选项"><a href="#执行e选项" class="headerlink" title="执行e选项"></a>执行<code>e</code>选项</h3><figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 把备份分区表搬到硬盘的尾部</span></span><br><span class="line">e</span><br></pre></td></tr></table></figure>
+<p><img src="/2022/12/gpt-partition-disk-extend/command_e.png"></p>
+<ul>
+<li><code>e</code>选项执行完之后，提示我们已经将分区表搬到硬盘尾部了</li>
+<li>再次执行<code>p</code>命令，可以看到最后可用扇区已经增加到9367183326</li>
+</ul>
+<h3 id="继续执行分区n选项"><a href="#继续执行分区n选项" class="headerlink" title="继续执行分区n选项"></a>继续执行分区<code>n</code>选项</h3><figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">n</span><br></pre></td></tr></table></figure>
+<p><img src="/2022/12/gpt-partition-disk-extend/command_n2.png"></p>
+<ul>
+<li>这时已经可以创建分区并且最后扇区数已经变成9367183326，就是我们扩容的大小了</li>
+</ul>
+<h3 id="最后记得执行w选项保存刚才的操作！！！"><a href="#最后记得执行w选项保存刚才的操作！！！" class="headerlink" title="最后记得执行w选项保存刚才的操作！！！"></a>最后记得执行<code>w</code>选项保存刚才的操作！！！</h3></article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">文章作者: </span><span class="post-copyright-info"><a href="lotbrick.com">三和大神梁某</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">文章链接: </span><span class="post-copyright-info"><a href="http://lotbrick.com/2022/12/gpt-partition-disk-extend.html">http://lotbrick.com/2022/12/gpt-partition-disk-extend.html</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来自 <a href="http://lotbrick.com" target="_blank">lotbrick</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/linux/">linux</a></div><div class="post_share"><div class="social-share" data-image="/img/bg10.png" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.staticfile.org/butterfly-extsrc/1.1.3/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.staticfile.org/butterfly-extsrc/1.1.3/sharejs/dist/js/social-share.min.js" defer></script></div></div><div class="post-reward"><div class="reward-button"><i class="fas fa-qrcode"></i> 打赏</div><div class="reward-main"><ul class="reward-all"><li class="reward-item"><a href="/img/wechat.JPG" target="_blank"><img class="post-qr-code-img" src="/img/wechat.JPG" alt="wechat"/></a><div class="post-qr-code-desc">wechat</div></li><li class="reward-item"><a href="/img/alipay.JPG" target="_blank"><img class="post-qr-code-img" src="/img/alipay.JPG" alt="alipay"/></a><div class="post-qr-code-desc">alipay</div></li><li class="reward-item"><a href="/img/paypal.JPG" target="_blank"><img class="post-qr-code-img" src="/img/paypal.JPG" alt="paypal"/></a><div class="post-qr-code-desc">paypal</div></li></ul></div></div><nav class="pagination-post" id="pagination"><div class="next-post pull-full"><a href="/2022/11/ssh-tunnel-with-script.html"><img class="next-cover" src="/img/bg14.webp" onerror="onerror=null;src='/img/404.jpg'" alt="cover of next post"><div class="pagination-info"><div class="label">下一篇</div><div class="next_info">在脚本中使用ssh建立隧道</div></div></a></div></nav><hr/><div id="post-comment"><div class="comment-head"><div class="comment-headline"><i class="fas fa-comments fa-fw"></i><span> 评论</span></div></div><div class="comment-wrap"><div><div id="giscus-wrap"></div></div></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="is-center"><div class="avatar-img"><img src="/img/avatar.JPG" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info__name">三和大神梁某</div><div class="author-info__description">这个人很懒,什么都不愿意学!</div></div><div class="card-info-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">5</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">10</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">1</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/jinyunboss"><i class="fab fa-github"></i><span>Follow Me</span></a><div class="card-info-social-icons is-center"><a class="social-icon" href="mailto:root@lotbrick.com" target="_blank" title="Email"><i class="fas fa-envelope"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>公告</span></div><div class="announcement_content">Python运维开发Q群: 324809763</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%89%8D%E6%83%85%E6%8F%90%E8%A6%81"><span class="toc-number">1.</span> <span class="toc-text">前情提要</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%97%AE%E9%A2%98%E5%8E%9F%E5%9B%A0"><span class="toc-number">2.</span> <span class="toc-text">问题原因</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%A7%A3%E5%86%B3%E6%96%B9%E5%BC%8F"><span class="toc-number">3.</span> <span class="toc-text">解决方式</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BD%BF%E7%94%A8gdisk%E7%9A%84v%E9%80%89%E9%A1%B9%E6%A3%80%E6%9F%A5%E7%A3%81%E7%9B%98"><span class="toc-number">3.1.</span> <span class="toc-text">使用gdisk的v选项检查磁盘</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%8C%89x%E8%BF%9B%E5%85%A5%E9%AB%98%E7%BA%A7%E9%80%89%E9%A1%B9"><span class="toc-number">3.2.</span> <span class="toc-text">按x进入高级选项</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%89%A7%E8%A1%8Ce%E9%80%89%E9%A1%B9"><span class="toc-number">3.3.</span> <span class="toc-text">执行e选项</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%BB%A7%E7%BB%AD%E6%89%A7%E8%A1%8C%E5%88%86%E5%8C%BAn%E9%80%89%E9%A1%B9"><span class="toc-number">3.4.</span> <span class="toc-text">继续执行分区n选项</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%9C%80%E5%90%8E%E8%AE%B0%E5%BE%97%E6%89%A7%E8%A1%8Cw%E9%80%89%E9%A1%B9%E4%BF%9D%E5%AD%98%E5%88%9A%E6%89%8D%E7%9A%84%E6%93%8D%E4%BD%9C%EF%BC%81%EF%BC%81%EF%BC%81"><span class="toc-number">3.5.</span> <span class="toc-text">最后记得执行w选项保存刚才的操作！！！</span></a></li></ol></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/2022/12/gpt-partition-disk-extend.html" title="GPT硬盘(GUID分区表)扩容后无法新建分区"><img src="/img/bg10.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="GPT硬盘(GUID分区表)扩容后无法新建分区"/></a><div class="content"><a class="title" href="/2022/12/gpt-partition-disk-extend.html" title="GPT硬盘(GUID分区表)扩容后无法新建分区">GPT硬盘(GUID分区表)扩容后无法新建分区</a><time datetime="2022-12-01T06:44:01.000Z" title="发表于 2022-12-01 14:44:01">2022-12-01</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2022/11/ssh-tunnel-with-script.html" title="在脚本中使用ssh建立隧道"><img src="/img/bg14.webp" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="在脚本中使用ssh建立隧道"/></a><div class="content"><a class="title" href="/2022/11/ssh-tunnel-with-script.html" title="在脚本中使用ssh建立隧道">在脚本中使用ssh建立隧道</a><time datetime="2022-11-26T04:20:22.000Z" title="发表于 2022-11-26 12:20:22">2022-11-26</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2022/11/celery-error.html" title="Celery问题记录"><img src="/img/bg11.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Celery问题记录"/></a><div class="content"><a class="title" href="/2022/11/celery-error.html" title="Celery问题记录">Celery问题记录</a><time datetime="2022-11-24T01:48:17.000Z" title="发表于 2022-11-24 09:48:17">2022-11-24</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2022/11/rhel-vs-debian.html" title="CentOS之后,该如何选择服务器发行版?"><img src="/img/bg14.webp" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="CentOS之后,该如何选择服务器发行版?"/></a><div class="content"><a class="title" href="/2022/11/rhel-vs-debian.html" title="CentOS之后,该如何选择服务器发行版?">CentOS之后,该如何选择服务器发行版?</a><time datetime="2022-11-21T10:06:07.000Z" title="发表于 2022-11-21 18:06:07">2022-11-21</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2022/11/zabbix-alert-to-wecome.html" title="zabbix告警抑制脚本"><img src="/img/bg10.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="zabbix告警抑制脚本"/></a><div class="content"><a class="title" href="/2022/11/zabbix-alert-to-wecome.html" title="zabbix告警抑制脚本">zabbix告警抑制脚本</a><time datetime="2022-11-21T03:00:27.000Z" title="发表于 2022-11-21 11:00:27">2022-11-21</time></div></div></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2022 By 三和大神梁某</div><div class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><a id="to_comment" href="#post-comment" title="直达评论"><i class="fas fa-comments"></i></a><button id="go-up" type="button" title="回到顶部"><i class="fas fa-arrow-up"></i></button></div></div><div id="local-search"><div class="search-dialog"><nav class="search-nav"><span class="search-dialog-title">搜索</span><span id="loading-status"></span><button class="search-close-button"><i class="fas fa-times"></i></button></nav><div class="is-center" id="loading-database"><i class="fas fa-spinner fa-pulse"></i><span>  数据库加载中</span></div><div class="search-wrap"><div id="local-search-input"><div class="local-search-box"><input class="local-search-box--input" placeholder="搜索文章" type="text"/></div></div><hr/><div id="local-search-results"></div></div></div><div id="search-mask"></div></div><div><script src="https://cdn.staticfile.org/hexo-theme-butterfly/4.5.1/js/utils.min.js"></script><script src="https://cdn.staticfile.org/hexo-theme-butterfly/4.5.1/js/main.min.js"></script><script src="https://cdn.staticfile.org/fancyapps-ui/4.0.31/fancybox.umd.min.js"></script><script src="https://cdn.staticfile.org/hexo-theme-butterfly/4.5.1/js/search/local-search.min.js"></script><div class="js-pjax"><script>function loadGiscus () {
+  let nowTheme = document.documentElement.getAttribute('data-theme') === 'dark' ? 'dark' : 'light'
+
+  const config = Object.assign({
+    src: 'https://giscus.app/client.js',
+    'data-repo': 'jinyunboss/website',
+    'data-repo-id': 'R_kgDOIeHUzQ',
+    'data-category-id': 'DIC_kwDOIeHUzc4CSrJ4',
+    'data-mapping': 'pathname',
+    'data-theme': nowTheme,
+    'data-reactions-enabled': '1',
+    crossorigin: 'anonymous',
+    async: true
+  },null)
+
+  let ele = document.createElement('script')
+  for (let key in config) {
+    ele.setAttribute(key, config[key])
+  }
+  document.getElementById('giscus-wrap').insertAdjacentElement('afterbegin',ele)
+}
+
+function changeGiscusTheme () {
+  const theme = document.documentElement.getAttribute('data-theme') === 'dark' ? 'dark' : 'light'
+
+  function sendMessage(message) {
+    const iframe = document.querySelector('iframe.giscus-frame');
+    if (!iframe) return;
+    iframe.contentWindow.postMessage({ giscus: message }, 'https://giscus.app');
+  }
+
+  sendMessage({
+    setConfig: {
+      theme: theme
+    }
+  });
+}
+
+if ('Giscus' === 'Giscus' || !true) {
+  if (true) btf.loadComment(document.getElementById('giscus-wrap'), loadGiscus)
+  else loadGiscus()
+} else {
+  function loadOtherComment () {
+    loadGiscus()
+  }
+}</script></div><script id="canvas_nest" defer="defer" color="0,0,255" opacity="0.7" zIndex="-1" count="99" mobile="false" src="https://cdn.staticfile.org/butterfly-extsrc/1.1.3/canvas-nest.min.js"></script><script id="click-show-text" src="https://cdn.staticfile.org/butterfly-extsrc/1.1.3/click-show-text.min.js" data-mobile="false" data-text="ojbk" data-fontsize="15px" data-random="false" async="async"></script><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div></body></html>
